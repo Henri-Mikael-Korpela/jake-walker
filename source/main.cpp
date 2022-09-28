@@ -80,19 +80,22 @@ void failGame(){
     print("GAME OVER\n\0", &PrintCallbacks::normal);
 }
 
-void dieOnBeach(){
-    print("You stayed on the beach doing nothing. You thought someone would come to rescue you. But no one came.\0", &PrintCallbacks::normal);
-    print("\n\n\0", &PrintCallbacks::paragraph_change);
+namespace Actions{
+    void dieOnBeach(){
+        print("You stayed on the beach doing nothing. You thought someone would come to rescue you. But no one came.\0", &PrintCallbacks::normal);
+        print("\n\n\0", &PrintCallbacks::paragraph_change);
 
-    print("You died of starvation.\0", &PrintCallbacks::normal);
-    print("\n\n\0", &PrintCallbacks::paragraph_change);
+        print("You died of starvation.\0", &PrintCallbacks::normal);
+        print("\n\n\0", &PrintCallbacks::paragraph_change);
 
-    failGame();
+        failGame();
+    }
+    void startWalking(){
+        print("Jake started walking along the coastline.\0", &PrintCallbacks::normal);
+        print("\n\n\0", &PrintCallbacks::paragraph_change);
+    }
 }
-void startWalking(){
-    print("Jake started walking along the coastline.\0", &PrintCallbacks::normal);
-    print("\n\n\0", &PrintCallbacks::paragraph_change);
-}
+
 template<I32 Size>
 Answer const* const get_answer_by_user_input(std::array<Answer, Size> const& answers){
     I32 answer_number;
@@ -129,11 +132,11 @@ int main(int argc, char* argv[]){
     std::array<Answer, 2> what_to_do_answers = {
         Answer{
             "Stand up and start walking\0",
-            &startWalking
+            &Actions::startWalking
         },
         Answer{
             "Continue sitting on the beach\0",
-            &dieOnBeach
+            &Actions::dieOnBeach
         }
     };
     printQuestion<2>("What do you do?\0", what_to_do_answers);
