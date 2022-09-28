@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <cstdint>
 #include <cstring>
+#include <string>
 #include <thread>
 
 typedef int32_t I32;
@@ -55,6 +56,20 @@ void print(char const *value, PrintSettings (*callback)(char const& c)){
 
     fflush(stdout);
 }
+template<I32 Size>
+void printQuestion(char const *question, std::array<char const*, Size>&& answers){
+    print(question, &PrintCallbacks::question);
+    print("\n\n\0", &PrintCallbacks::paragraph_change);
+
+    for(int i = 0; i != answers.size(); ++i){
+        print(std::to_string(i + 1).c_str());
+        print(". ");
+        print(answers[i]);
+        print("\n");
+    }
+
+    print("\n");
+}
 
 int main(int argc, char* argv[]){
     print("JAKE WALKER\0", &PrintCallbacks::title);
@@ -76,12 +91,10 @@ int main(int argc, char* argv[]){
     print("Wait, an island? That's right, that is what you can see. You are on a coast, a vast ocean is before your very eyes. It is getting cold. You need a place to stay.\0", &PrintCallbacks::normal);
     print("\n\n\0", &PrintCallbacks::paragraph_change);
 
-    print("What do you do?", &PrintCallbacks::question);
-    print("\n\n\0", &PrintCallbacks::paragraph_change);
-
-    print("1. Stand up and start walking\n");
-    print("2. Continue sitting on the beach\n");
-    print("\n");
+    printQuestion<2>("What do you do?\0", {
+        "Stand up and start walking\0",
+        "Continue sitting on the beach\0"
+    });
 
     return 0;
 }
