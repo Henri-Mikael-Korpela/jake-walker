@@ -6,6 +6,9 @@
 
 typedef int32_t I32;
 
+void delay(I32 delayInMilliseconds){
+    std::this_thread::sleep_for(std::chrono::milliseconds(delayInMilliseconds));
+}
 void print(char const *value){
     printf("%s", value);
 }
@@ -17,13 +20,16 @@ void print(char const *value, I32 delayInMilliseconds){
         
         if(i + 1 != len){
             fflush(stdout);
-            std::this_thread::sleep_for(std::chrono::milliseconds(delayInMilliseconds));
+            delay(delayInMilliseconds);
         }
     }
+
+    fflush(stdout);
 }
 
 int main(int argc, char* argv[]){
     print("JAKE WALKER\0", 200);
+    delay(500);
     print("\n\n\0", 1000);
 
     print("It is dark. You cannot see anything. You can only feel something soft touching your face. It is sand. Your eyes are opening. Now you see more clearly, but it is still dark.\0", 75);
