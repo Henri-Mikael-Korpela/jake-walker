@@ -6,21 +6,50 @@
 
 typedef int32_t I32;
 
+struct PrintSettings{
+    bool const visible;
+    I32 const delay;
+};
+
+namespace PrintCallbacks{
+    PrintSettings normal(char const& c){
+        switch(c){
+            case '.':
+            case ':':
+                return { true, 350 };
+            default:
+                return { true, 75 };
+        }
+    }
+    PrintSettings paragraph_change(char const& c){
+        return { true, 75 };
+    }
+    PrintSettings question(char const& c){
+        return { true, 100 };
+    }
+    PrintSettings title(char const& c){
+        return { true, 200 };
+    }
+}
+
 void delay(I32 delayInMilliseconds){
     std::this_thread::sleep_for(std::chrono::milliseconds(delayInMilliseconds));
 }
 void print(char const *value){
     printf("%s", value);
 }
-void print(char const *value, I32 delayInMilliseconds){
+void print(char const *value, PrintSettings (*callback)(char const& c)){
     auto len = strlen(value);
 
     for(decltype(len) i = 0; i != len; ++i){
-        printf("%c", value[i]);
-        
-        if(i + 1 != len){
+        auto const settings = callback(value[i]);
+
+        if(settings.visible){
+            printf("%c", value[i]);
             fflush(stdout);
-            delay(delayInMilliseconds);
+        }
+        if(i + 1 != len){
+            delay(settings.delay);
         }
     }
 
@@ -28,27 +57,27 @@ void print(char const *value, I32 delayInMilliseconds){
 }
 
 int main(int argc, char* argv[]){
-    print("JAKE WALKER\0", 200);
+    print("JAKE WALKER\0", &PrintCallbacks::title);
     delay(500);
-    print("\n\n\0", 1000);
+    print("\n\n\0", &PrintCallbacks::paragraph_change);
 
-    print("It is dark. You cannot see anything. You can only feel something soft touching your face. It is sand. Your eyes are opening. Now you see more clearly, but it is still dark.\0", 75);
-    print("\n\n\0", 1000);
+    print("It is dark. You cannot see anything. You can only feel something soft touching your face. It is sand. Your eyes are opening. Now you see more clearly, but it is still dark.\0", &PrintCallbacks::normal);
+    print("\n\n\0", &PrintCallbacks::paragraph_change);
 
-    print("You have survived. You can't remember what happened, but one thing is for certain: you are in a strange place. It is somewhat scary to lay on the sand in this strange place.\0", 75);
-    print("\n\n\0", 1000);
+    print("You have survived. You can't remember what happened, but one thing is for certain: you are in a strange place. It is somewhat scary to lay on the sand in this strange place.\0", &PrintCallbacks::normal);
+    print("\n\n\0", &PrintCallbacks::paragraph_change);
 
-    print("You rise up to sit down. You look around. There is no one around. It seems you are alone - at least for now...\0", 75);
-    print("\n\n\0", 1000);
+    print("You rise up to sit down. You look around. There is no one around. It seems you are alone - at least for now...\0", &PrintCallbacks::normal);
+    print("\n\n\0", &PrintCallbacks::paragraph_change);
 
-    print("You may not remember how you ended up here, but you sure remember your name. Your name is Jake Walker. You are a scientiest. You have done research in your life, but maybe what you are about to face on this island is something extraordinary.\0", 75);
-    print("\n\n\0", 1000);
+    print("You may not remember how you ended up here, but you sure remember your name. Your name is Jake Walker. You are a scientiest. You have done research in your life, but maybe what you are about to face on this island is something extraordinary.\0", &PrintCallbacks::normal);
+    print("\n\n\0", &PrintCallbacks::paragraph_change);
 
-    print("Wait, an island? That's right, that is what you can see. You are on a coast, a vast ocean is before your very eyes. It is getting cold. You need a place to stay.\0", 75);
-    print("\n\n\0", 1000);
+    print("Wait, an island? That's right, that is what you can see. You are on a coast, a vast ocean is before your very eyes. It is getting cold. You need a place to stay.\0", &PrintCallbacks::normal);
+    print("\n\n\0", &PrintCallbacks::paragraph_change);
 
-    print("What do you do?", 100);
-    print("\n\n\0", 1000);
+    print("What do you do?", &PrintCallbacks::question);
+    print("\n\n\0", &PrintCallbacks::paragraph_change);
 
     print("1. Stand up and start walking\n");
     print("2. Continue sitting on the beach\n");
