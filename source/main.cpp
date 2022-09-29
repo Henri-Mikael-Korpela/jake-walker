@@ -38,10 +38,10 @@ namespace PrintCallbacks{
     }
 }
 
-void delay(I32 delayInMilliseconds){
+inline void delay(I32 delayInMilliseconds){
     std::this_thread::sleep_for(std::chrono::milliseconds(delayInMilliseconds));
 }
-void print(char const *value){
+inline void print(char const *value){
     printf("%s", value);
 }
 void print(char const *value, PrintSettings (*callback)(char const& c)){
