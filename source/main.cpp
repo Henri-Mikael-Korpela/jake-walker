@@ -7,7 +7,7 @@
 
 typedef int32_t I32;
 
-struct Answer{
+struct AnswerOption{
     char const *text;
     void (*callback)();
 };
@@ -76,7 +76,7 @@ void print(char const *value, PrintSettings (*callback)(char const& c)){
     fflush(stdout);
 }
 template<I32 Size>
-void printQuestion(char const *question, std::array<Answer, Size> const& answers){
+void printQuestion(char const *question, std::array<AnswerOption, Size> const& answers){
     enable_color_for_print(PrintColor::Green);
 
     print(question, &PrintCallbacks::question);
@@ -98,7 +98,7 @@ void failGame(){
     print("GAME OVER\n\0", &PrintCallbacks::normal);
 }
 template<I32 Size>
-Answer const* const get_answer_by_user_input(std::array<Answer, Size> const& answers){
+AnswerOption const* const get_answer_by_user_input(std::array<AnswerOption, Size> const& answers){
     I32 answer_number;
     scanf("%i", &answer_number);
 
@@ -110,7 +110,7 @@ Answer const* const get_answer_by_user_input(std::array<Answer, Size> const& ans
     }
 }
 template<I32 Size>
-inline void handle_answer(std::array<Answer, Size> const& answers){
+inline void handle_answer(std::array<AnswerOption, Size> const& answers){
     wait_for_answer:
     auto const answer = get_answer_by_user_input<2>(answers);
 
@@ -149,12 +149,12 @@ namespace Actions{
         print("A couple of minutes later Jake could see something. He saw some darks objects.\0", &PrintCallbacks::normal);
         print("\n\n\0", &PrintCallbacks::paragraph_change);
 
-        std::array<Answer, 2> what_to_do_answers = {
-            Answer{
+        std::array<AnswerOption, 2> what_to_do_answers = {
+            AnswerOption{
                 "Go to them.\0",
                 &Actions::goToRemainsOfPlane
             },
-            Answer{
+            AnswerOption{
                 "Avoid them.\0",
                 &Actions::goAlongsideRiver
             }
@@ -184,12 +184,12 @@ int main(int argc, char* argv[]){
     print("Wait, an island? That's right, that is what you can see. You are on a coast, a vast ocean is before your very eyes. It is getting cold. You need a place to stay.\0", &PrintCallbacks::normal);
     print("\n\n\0", &PrintCallbacks::paragraph_change);
 
-    std::array<Answer, 2> what_to_do_answers = {
-        Answer{
+    std::array<AnswerOption, 2> what_to_do_answers = {
+        AnswerOption{
             "Stand up and start walking.\0",
             &Actions::startWalking
         },
-        Answer{
+        AnswerOption{
             "Continue sitting on the beach.\0",
             &Actions::dieOnBeach
         }
