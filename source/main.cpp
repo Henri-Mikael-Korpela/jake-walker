@@ -139,6 +139,53 @@ namespace Actions{
     }
 }
 
+namespace Actions{
+    void dieOnBeach(){
+        print("You stayed on the beach doing nothing. You thought someone would come to rescue you. But no one came.\0", &PrintCallbacks::normal);
+        print("\n\n\0", &PrintCallbacks::paragraph_change);
+
+        print("You died of starvation.\0", &PrintCallbacks::normal);
+        print("\n\n\0", &PrintCallbacks::paragraph_change);
+
+        failGame();
+    }
+    void goAlongsideRiver(){
+        print("Unsure of what these dark objects were, Jake decided not to approach them. He saw a river nearby and decided to walk alongside it.\0", &PrintCallbacks::normal);
+        print("\n\n\0", &PrintCallbacks::paragraph_change);
+    }
+    void goToRemainsOfPlane(){
+        print("Intrigued, Jake took more steps towards it. He thought he would find something useful there. He saw remains of a plane.\0", &PrintCallbacks::normal);
+        print("\n\n\0", &PrintCallbacks::paragraph_change);
+    }
+    void startWalking(){
+        print("Jake started to walk along the coastline. Jake could feel the cold in his hands. As he was walking, he noticed how cloudy it was in the darkness. Jake wanted to find any sign of civilization: maybe fire, maybe light. There was nothing.\0", &PrintCallbacks::normal);
+        print("\n\n\0", &PrintCallbacks::paragraph_change);
+
+        print("A couple of minutes later Jake could see something. He saw some darks objects.\0", &PrintCallbacks::normal);
+        print("\n\n\0", &PrintCallbacks::paragraph_change);
+
+        std::array<Answer, 2> what_to_do_answers = {
+            Answer{
+                "Go to them.\0",
+                &Actions::goToRemainsOfPlane
+            },
+            Answer{
+                "Avoid them.\0",
+                &Actions::goAlongsideRiver
+            }
+        };
+        printQuestion<2>("What do you do?\0", what_to_do_answers);
+        auto const answer = get_answer_by_user_input<2>(what_to_do_answers);
+
+        if(answer == nullptr){
+            print("Invalid answer was given!\n");
+        }
+        else{
+            answer->callback();
+        }
+    }
+}
+
 int main(int argc, char* argv[]){
     print("JAKE WALKER\0", &PrintCallbacks::title);
     delay(500);
