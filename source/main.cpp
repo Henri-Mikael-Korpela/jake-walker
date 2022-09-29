@@ -15,7 +15,7 @@ struct AnswerOption{
     void (*callback)();
 };
 
-void failGame(){
+void fail_game(){
     print("GAME OVER\n\0", &Print::Callbacks::normal);
 }
 template<I32 Size>
@@ -64,24 +64,24 @@ void print_question(char const *question, std::array<AnswerOption, Size> const& 
 }
 
 namespace Actions{
-    void dieOnBeach(){
+    void die_on_beach(){
         print("You stayed on the beach doing nothing. You thought someone would come to rescue you. But no one came.\0", &Print::Callbacks::normal);
         print("\n\n\0", &Print::Callbacks::paragraph_change);
 
         print("You died of starvation.\0", &Print::Callbacks::normal);
         print("\n\n\0", &Print::Callbacks::paragraph_change);
 
-        failGame();
+        fail_game();
     }
-    void goAlongsideRiver(){
+    void go_alongside_river(){
         print("Unsure of what these dark objects were, Jake decided not to approach them. He saw a river nearby and decided to walk alongside it.\0", &Print::Callbacks::normal);
         print("\n\n\0", &Print::Callbacks::paragraph_change);
     }
-    void goToRemainsOfPlane(){
+    void go_to_remains_of_plane(){
         print("Intrigued, Jake took more steps towards it. He thought he would find something useful there. He saw remains of a plane.\0", &Print::Callbacks::normal);
         print("\n\n\0", &Print::Callbacks::paragraph_change);
     }
-    void startWalking(){
+    void start_walking(){
         print("Jake started to walk along the coastline. Jake could feel the cold in his hands. As he was walking, he noticed how cloudy it was in the darkness. Jake wanted to find any sign of civilization: maybe fire, maybe light. There was nothing.\0", &Print::Callbacks::normal);
         print("\n\n\0", &Print::Callbacks::paragraph_change);
 
@@ -91,11 +91,11 @@ namespace Actions{
         std::array<AnswerOption, 2> what_to_do_answers = {
             AnswerOption{
                 "Go to them.\0",
-                &Actions::goToRemainsOfPlane
+                &Actions::go_to_remains_of_plane
             },
             AnswerOption{
                 "Avoid them.\0",
-                &Actions::goAlongsideRiver
+                &Actions::go_alongside_river
             }
         };
         print_question<2>("What do you do?\0", what_to_do_answers);
@@ -126,11 +126,11 @@ int main(int argc, char* argv[]){
     std::array<AnswerOption, 2> what_to_do_answers = {
         AnswerOption{
             "Stand up and start walking.\0",
-            &Actions::startWalking
+            &Actions::start_walking
         },
         AnswerOption{
             "Continue sitting on the beach.\0",
-            &Actions::dieOnBeach
+            &Actions::die_on_beach
         }
     };
     print_question<2>("What do you do?\0", what_to_do_answers);
