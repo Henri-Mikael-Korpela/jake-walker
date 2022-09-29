@@ -12,6 +12,10 @@ struct Answer{
     void (*callback)();
 };
 
+enum class PrintColor : I32{
+    Green
+};
+
 struct PrintSettings{
     bool const visible;
     I32 const delay;
@@ -41,6 +45,16 @@ namespace PrintCallbacks{
 inline void delay(I32 delayInMilliseconds){
     std::this_thread::sleep_for(std::chrono::milliseconds(delayInMilliseconds));
 }
+inline void disable_color_for_print(){
+    printf("\033[0m");
+}
+inline void enable_color_for_print(PrintColor const&& color){
+    switch(color){
+        case PrintColor::Green:
+            printf("\033[0;32m");
+            break;
+    }
+}
 inline void print(char const *value){
     printf("%s", value);
 }
@@ -63,6 +77,8 @@ void print(char const *value, PrintSettings (*callback)(char const& c)){
 }
 template<I32 Size>
 void printQuestion(char const *question, std::array<Answer, Size> const& answers){
+    enable_color_for_print(PrintColor::Green);
+
     print(question, &PrintCallbacks::question);
     print("\n\n\0", &PrintCallbacks::paragraph_change);
 
@@ -72,6 +88,8 @@ void printQuestion(char const *question, std::array<Answer, Size> const& answers
         print(answers[i].text);
         print("\n");
     }
+
+    disable_color_for_print();
 
     print("\n");
 }
