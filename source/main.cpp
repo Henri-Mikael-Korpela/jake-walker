@@ -24,7 +24,7 @@ namespace PrintCallbacks{
             case ':':
                 return { true, 350 };
             default:
-                return { true, 75 };
+                return { true, 20 };
         }
     }
     PrintSettings paragraph_change(char const& c){
@@ -79,6 +79,18 @@ void printQuestion(char const *question, std::array<Answer, Size> const& answers
 void failGame(){
     print("GAME OVER\n\0", &PrintCallbacks::normal);
 }
+template<I32 Size>
+Answer const* const get_answer_by_user_input(std::array<Answer, Size> const& answers){
+    I32 answer_number;
+    scanf("%i", &answer_number);
+
+    if(answer_number >= 1 && answer_number <= answers.size()){
+        return &answers[answer_number - 1];
+    }
+    else{
+        return nullptr;
+    }
+}
 
 namespace Actions{
     void dieOnBeach(){
@@ -90,22 +102,40 @@ namespace Actions{
 
         failGame();
     }
-    void startWalking(){
-        print("Jake started walking along the coastline.\0", &PrintCallbacks::normal);
+    void goAlongsideRiver(){
+        print("Unsure of what these dark objects were, Jake decided not to approach them. He saw a river nearby and decided to walk alongside it.\0", &PrintCallbacks::normal);
         print("\n\n\0", &PrintCallbacks::paragraph_change);
     }
-}
-
-template<I32 Size>
-Answer const* const get_answer_by_user_input(std::array<Answer, Size> const& answers){
-    I32 answer_number;
-    scanf("%i", &answer_number);
-
-    if(answer_number >= 1 && answer_number <= answers.size()){
-        return &answers[answer_number - 1];
+    void goToRemainsOfPlane(){
+        print("Intrigued, Jake took more steps towards it. He thought he would find something useful there. He saw remains of a plane.\0", &PrintCallbacks::normal);
+        print("\n\n\0", &PrintCallbacks::paragraph_change);
     }
-    else{
-        return nullptr;
+    void startWalking(){
+        print("Jake started to walk along the coastline. Jake could feel the cold in his hands. As he was walking, he noticed how cloudy it was in the darkness. Jake wanted to find any sign of civilization: maybe fire, maybe light. There was nothing.\0", &PrintCallbacks::normal);
+        print("\n\n\0", &PrintCallbacks::paragraph_change);
+
+        print("A couple of minutes later Jake could see something. He saw some darks objects.\0", &PrintCallbacks::normal);
+        print("\n\n\0", &PrintCallbacks::paragraph_change);
+
+        std::array<Answer, 2> what_to_do_answers = {
+            Answer{
+                "Go to them.\0",
+                &Actions::goToRemainsOfPlane
+            },
+            Answer{
+                "Avoid them.\0",
+                &Actions::goAlongsideRiver
+            }
+        };
+        printQuestion<2>("What do you do?\0", what_to_do_answers);
+        auto const answer = get_answer_by_user_input<2>(what_to_do_answers);
+
+        if(answer == nullptr){
+            print("Invalid answer was given!\n");
+        }
+        else{
+            answer->callback();
+        }
     }
 }
 
@@ -131,11 +161,11 @@ int main(int argc, char* argv[]){
 
     std::array<Answer, 2> what_to_do_answers = {
         Answer{
-            "Stand up and start walking\0",
+            "Stand up and start walking.\0",
             &Actions::startWalking
         },
         Answer{
-            "Continue sitting on the beach\0",
+            "Continue sitting on the beach.\0",
             &Actions::dieOnBeach
         }
     };
