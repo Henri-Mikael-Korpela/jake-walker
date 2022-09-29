@@ -5,8 +5,7 @@
 #include <string>
 #include <thread>
 
-typedef int32_t I32;
-
+#include "types.hpp"
 #include "Timing.hpp"
 #include "Print.hpp"
 

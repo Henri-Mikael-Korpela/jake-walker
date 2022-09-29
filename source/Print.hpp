@@ -1,5 +1,6 @@
 #ifndef _JAKE_HEADER_PRINT
 #define _JAKE_HEADER_PRINT
+#include "types.hpp"
 #include "Timing.hpp"
 
 namespace Print{
