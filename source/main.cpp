@@ -50,7 +50,7 @@ void print_question(char const *question, std::array<AnswerOption, Size> const& 
     print(question, &Print::Callbacks::question);
     print("\n\n\0", &Print::Callbacks::paragraph_change);
 
-    for(int i = 0; i != answers.size(); ++i){
+    for(decltype(answers.size()) i = 0; i != answers.size(); ++i){
         print(std::to_string(i + 1).c_str());
         print(". ");
         print(answers[i].text);
