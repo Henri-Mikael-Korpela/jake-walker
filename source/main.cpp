@@ -91,6 +91,20 @@ Answer const* const get_answer_by_user_input(std::array<Answer, Size> const& ans
         return nullptr;
     }
 }
+template<I32 Size>
+inline void handle_answer(std::array<Answer, Size> const& answers){
+    wait_for_answer:
+    auto const answer = get_answer_by_user_input<2>(answers);
+
+    if(answer == nullptr){
+        print("Invalid answer was given. Please try again: ");
+        goto wait_for_answer;
+    }
+    else{
+        print("\n\n\0", &PrintCallbacks::paragraph_change);
+        answer->callback();
+    }
+}
 
 namespace Actions{
     void dieOnBeach(){
@@ -128,14 +142,7 @@ namespace Actions{
             }
         };
         printQuestion<2>("What do you do?\0", what_to_do_answers);
-        auto const answer = get_answer_by_user_input<2>(what_to_do_answers);
-
-        if(answer == nullptr){
-            print("Invalid answer was given!\n");
-        }
-        else{
-            answer->callback();
-        }
+        handle_answer<2>(what_to_do_answers);
     }
 }
 
@@ -170,14 +177,7 @@ int main(int argc, char* argv[]){
         }
     };
     printQuestion<2>("What do you do?\0", what_to_do_answers);
-    auto const answer = get_answer_by_user_input<2>(what_to_do_answers);
-
-    if(answer == nullptr){
-        print("Invalid answer was given!\n");
-    }
-    else{
-        answer->callback();
-    }
+    handle_answer<2>(what_to_do_answers);
 
     return 0;
 }
