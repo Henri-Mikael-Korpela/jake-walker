@@ -11,11 +11,7 @@ mod callbacks {
 
     pub fn normal(c: &char) -> PrintSettings {
         match c {
-            '.' => PrintSettings {
-                visible: true,
-                delay: 350,
-            },
-            ':' => PrintSettings {
+            '.' | ':' => PrintSettings {
                 visible: true,
                 delay: 350,
             },
