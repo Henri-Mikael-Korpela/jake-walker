@@ -51,6 +51,48 @@ mod callbacks {
 fn delay(delay_in_milliseconds: u64) {
     thread::sleep(Duration::from_millis(delay_in_milliseconds));
 }
+fn get_answer_by_user_input(answers: &[AnswerOption]) -> Option<&AnswerOption> {
+    use std::io::stdin;
+
+    let mut s = String::new();
+    stdin()
+        .read_line(&mut s)
+        .expect("Did not enter a correct string");
+    if let Some('\n') = s.chars().next_back() {
+        s.pop();
+    }
+    if let Some('\r') = s.chars().next_back() {
+        s.pop();
+    }
+
+    return match s.parse::<usize>() {
+        Ok(answer_number) => {
+            if answer_number >= 1 && answer_number <= answers.len() {
+                Some(&answers[answer_number - 1])
+            } else {
+                None
+            }
+        }
+        Err(_e) => None,
+    };
+}
+fn handle_answer(answers: &[AnswerOption]) {
+    loop {
+        let answer = get_answer_by_user_input(answers);
+
+        match answer {
+            Some(a) => {
+                print("\n\n", callbacks::paragraph_change);
+                (a.callback)();
+                break;
+            }
+            None => {
+                print!("Invalid answer was given. Please try again: ");
+                io::stdout().flush().unwrap();
+            }
+        }
+    }
+}
 fn print(value: &str, callback: fn(c: &char) -> PrintSettings) {
     for (i, c) in value.chars().enumerate() {
         let settings = callback(&c);
@@ -93,6 +135,7 @@ fn print_question(question: &str, answers: &[AnswerOption]) {
 
 mod actions {
     use callbacks;
+    use handle_answer;
     use print;
     use print_question;
     use AnswerOption;
@@ -136,8 +179,12 @@ mod actions {
             },
         ];
         print_question("What do you do?", &what_to_do_answers);
+        handle_answer(&what_to_do_answers);
     }
-    fn start_walking() {}
+    fn start_walking() {
+        print("Jake started to walk along the coastline. Jake could feel the cold in his hands. As he was walking, he noticed how cloudy it was in the darkness. Jake wanted to find any sign of civilization: maybe fire, maybe light. There was nothing.", callbacks::normal);
+        print("\n\n", callbacks::paragraph_change);
+    }
 }
 
 fn main() {
