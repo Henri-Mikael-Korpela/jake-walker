@@ -1,6 +1,13 @@
 use std::io::{self, Write};
 use std::{thread, time::Duration};
 
+pub struct AnswerOption {
+    text: &'static str,
+    callback: fn(),
+}
+enum PrintColor {
+    Green,
+}
 pub struct PrintSettings {
     visible: bool,
     delay: u64,
@@ -25,6 +32,12 @@ mod callbacks {
         return PrintSettings {
             visible: true,
             delay: 75,
+        };
+    }
+    pub fn question(_c: &char) -> PrintSettings {
+        return PrintSettings {
+            visible: true,
+            delay: 100,
         };
     }
     pub fn title(_c: &char) -> PrintSettings {
@@ -53,11 +66,49 @@ fn print(value: &str, callback: fn(c: &char) -> PrintSettings) {
 
     io::stdout().flush().unwrap();
 }
+fn print_disable_color() {
+    print!("\x1b[0m");
+}
+fn print_enable_color(color: PrintColor) {
+    match color {
+        PrintColor::Green => {
+            print!("\x1b[0;32m");
+        }
+    }
+}
+fn print_question(question: &str, answers: &[AnswerOption]) {
+    print_enable_color(PrintColor::Green);
+
+    print(question, callbacks::question);
+    print("\n\n", callbacks::paragraph_change);
+
+    for i in 0..answers.len() {
+        println!("{}. {}", i + 1, answers[i].text);
+    }
+
+    print_disable_color();
+
+    println!();
+}
 
 mod actions {
     use callbacks;
     use print;
+    use print_question;
+    use AnswerOption;
 
+    fn die_on_beach() {
+        print("You stayed on the beach doing nothing. You thought someone would come to rescue you. But no one came.", callbacks::normal);
+        print("\n\n", callbacks::paragraph_change);
+
+        print("You died of starvation.\0", callbacks::normal);
+        print("\n\n", callbacks::paragraph_change);
+
+        fail_game();
+    }
+    fn fail_game() {
+        print("GAME OVER\n", callbacks::normal);
+    }
     pub fn start_story() {
         print("It is dark. You cannot see anything. You can only feel something soft touching your face. It is sand. Your eyes are opening. Now you see more clearly, but it is still dark.", callbacks::normal);
         print("\n\n", callbacks::paragraph_change);
@@ -73,7 +124,20 @@ mod actions {
 
         print("Wait, an island? That's right, that is what you can see. You are on a coast, a vast ocean is before your very eyes. It is getting cold. You need a place to stay.", callbacks::normal);
         print("\n\n", callbacks::paragraph_change);
+
+        let what_to_do_answers = [
+            AnswerOption {
+                text: "Stand up and start walking.",
+                callback: start_walking,
+            },
+            AnswerOption {
+                text: "Continue sitting on the beach.",
+                callback: die_on_beach,
+            },
+        ];
+        print_question("What do you do?", &what_to_do_answers);
     }
+    fn start_walking() {}
 }
 
 fn main() {
