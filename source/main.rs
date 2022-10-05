@@ -29,22 +29,22 @@ mod callbacks {
         }
     }
     pub fn paragraph_change(_c: &char) -> PrintSettings {
-        return PrintSettings {
+        PrintSettings {
             visible: true,
             delay: 75,
-        };
+        }
     }
     pub fn question(_c: &char) -> PrintSettings {
-        return PrintSettings {
+        PrintSettings {
             visible: true,
             delay: 100,
-        };
+        }
     }
     pub fn title(_c: &char) -> PrintSettings {
-        return PrintSettings {
+        PrintSettings {
             visible: true,
             delay: 200,
-        };
+        }
     }
 }
 
@@ -65,7 +65,7 @@ fn get_answer_by_user_input(answers: &[AnswerOption]) -> Option<&AnswerOption> {
         s.pop();
     }
 
-    return match s.parse::<usize>() {
+    match s.parse::<usize>() {
         Ok(answer_number) => {
             if answer_number >= 1 && answer_number <= answers.len() {
                 Some(&answers[answer_number - 1])
@@ -74,13 +74,11 @@ fn get_answer_by_user_input(answers: &[AnswerOption]) -> Option<&AnswerOption> {
             }
         }
         Err(_e) => None,
-    };
+    }
 }
 fn handle_answer(answers: &[AnswerOption]) {
     loop {
-        let answer = get_answer_by_user_input(answers);
-
-        match answer {
+        match get_answer_by_user_input(answers) {
             Some(a) => {
                 print("\n\n", callbacks::paragraph_change);
                 (a.callback)();
@@ -113,9 +111,7 @@ fn print_disable_color() {
 }
 fn print_enable_color(color: PrintColor) {
     match color {
-        PrintColor::Green => {
-            print!("\x1b[0;32m");
-        }
+        PrintColor::Green => print!("\x1b[0;32m"),
     }
 }
 fn print_question(question: &str, answers: &[AnswerOption]) {
