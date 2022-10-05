@@ -152,6 +152,14 @@ mod actions {
     fn fail_game() {
         print("GAME OVER\n", callbacks::normal);
     }
+    fn go_alongside_river() {
+        print("Unsure of what these dark objects were, Jake decided not to approach them. He saw a river nearby and decided to walk alongside it.", callbacks::normal);
+        print("\n\n", callbacks::paragraph_change);
+    }
+    fn go_to_remains_of_plane() {
+        print("Intrigued, Jake took more steps towards it. He thought he would find something useful there. He saw remains of a plane.", callbacks::normal);
+        print("\n\n", callbacks::paragraph_change);
+    }
     pub fn start_story() {
         print("It is dark. You cannot see anything. You can only feel something soft touching your face. It is sand. Your eyes are opening. Now you see more clearly, but it is still dark.", callbacks::normal);
         print("\n\n", callbacks::paragraph_change);
@@ -184,6 +192,25 @@ mod actions {
     fn start_walking() {
         print("Jake started to walk along the coastline. Jake could feel the cold in his hands. As he was walking, he noticed how cloudy it was in the darkness. Jake wanted to find any sign of civilization: maybe fire, maybe light. There was nothing.", callbacks::normal);
         print("\n\n", callbacks::paragraph_change);
+
+        print(
+            "A couple of minutes later Jake could see something. He saw some darks objects.\0",
+            callbacks::normal,
+        );
+        print("\n\n\0", callbacks::paragraph_change);
+
+        let what_to_do_answers = [
+            AnswerOption {
+                text: "Go to them.",
+                callback: go_to_remains_of_plane,
+            },
+            AnswerOption {
+                text: "Avoid them.",
+                callback: go_alongside_river,
+            },
+        ];
+        print_question("What do you do?", &what_to_do_answers);
+        handle_answer(&what_to_do_answers);
     }
 }
 
