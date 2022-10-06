@@ -140,7 +140,7 @@ mod actions {
         print("You stayed on the beach doing nothing. You thought someone would come to rescue you. But no one came.", callbacks::normal);
         print("\n\n", callbacks::paragraph_change);
 
-        print("You died of starvation.\0", callbacks::normal);
+        print("You died of starvation.", callbacks::normal);
         print("\n\n", callbacks::paragraph_change);
 
         fail_game();
@@ -190,10 +190,10 @@ mod actions {
         print("\n\n", callbacks::paragraph_change);
 
         print(
-            "A couple of minutes later Jake could see something. He saw some darks objects.\0",
+            "A couple of minutes later Jake could see something. He saw some darks objects.",
             callbacks::normal,
         );
-        print("\n\n\0", callbacks::paragraph_change);
+        print("\n\n", callbacks::paragraph_change);
 
         let what_to_do_answers = [
             AnswerOption {
