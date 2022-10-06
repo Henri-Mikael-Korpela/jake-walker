@@ -166,7 +166,7 @@ mod actions {
         print("You rise up to sit down. You look around. There is no one around. It seems you are alone - at least for now...", callbacks::normal);
         print("\n\n", callbacks::paragraph_change);
 
-        print("You may not remember how you ended up here, but you sure remember your name. Your name is Jake Walker. You are a scientiest. You have done research in your life, but maybe what you are about to face on this island is something extraordinary.", callbacks::normal);
+        print("You may not remember how you ended up here, but you sure remember your name. Your name is Jake Walker. You are a scientist. You have done research in your life, but maybe what you are about to face on this island is something extraordinary.", callbacks::normal);
         print("\n\n", callbacks::paragraph_change);
 
         print("Wait, an island? That's right, that is what you can see. You are on a coast, a vast ocean is before your very eyes. It is getting cold. You need a place to stay.", callbacks::normal);
