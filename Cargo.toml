@@ -1,0 +1,7 @@
+[package]
+name = "jake-walker"
+version = "0.1.0"
+
+[[bin]]
+name = "jake-walker"
+path = "source/main.rs"
