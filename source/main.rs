@@ -1,6 +1,6 @@
 mod answer;
 mod print;
-use print::{print_question, print_text};
+use print::{print_question, print_text, print_victory};
 mod print_callbacks;
 mod time;
 
@@ -53,6 +53,7 @@ mod actions {
     use print_callbacks::{normal, paragraph_change, title};
     use print_question;
     use print_text;
+    use print_victory;
     use time;
 
     fn die_on_beach() {
@@ -70,10 +71,72 @@ mod actions {
     fn go_alongside_river() {
         print_text("Unsure of what these dark objects were, Jake decided not to approach them. He saw a river nearby and decided to walk alongside it.", normal);
         print_text("\n\n", paragraph_change);
+
+        print_text(
+            "Jake had walked for a while, but he had to make choice now since trail branched.",
+            normal,
+        );
+        print_text("\n\n", paragraph_change);
+
+        let what_to_do_answers = [
+            AnswerOption {
+                text: "Go left.",
+                callback: go_left_after_river,
+            },
+            AnswerOption {
+                text: "Go right.",
+                callback: boat_found,
+            },
+        ];
+        print_question("What do you do?", &what_to_do_answers);
+        handle_answer(&what_to_do_answers);
+    }
+    fn go_left_after_river() {
+        print_text("Jake went left. However, this was a mistake since Jake walked in the dark, slipped and fell off the cliff and died.", normal);
+        print_text("\n\n", paragraph_change);
+
+        fail_game();
+    }
+    fn boat_found() {
+        print_text(
+            "Jake found a boat with oars. Now he can sail to safety!",
+            normal,
+        );
+        print_text("\n\n", paragraph_change);
+
+        win_game();
     }
     fn go_to_remains_of_plane() {
         print_text("Intrigued, Jake took more steps towards it. He thought he would find something useful there. He saw remains of a plane.", normal);
         print_text("\n\n", paragraph_change);
+
+        print_text("Jake walked slowly inside. Jake found the plane haunting. As Jake walked in it was silent. It was very dark inside.", normal);
+        print_text("\n\n", paragraph_change);
+
+        print_text(
+            "Jake really didn't anything useful on the plane yet.",
+            normal,
+        );
+        print_text("\n\n", paragraph_change);
+
+        let what_to_do_answers = [
+            AnswerOption {
+                text: "Move on and continue walking the coastline.",
+                callback: boat_found,
+            },
+            AnswerOption {
+                text: "Stay on the plane to find if there is anything useful.",
+                callback: stay_on_plane,
+            },
+        ];
+        print_question("What do you do?", &what_to_do_answers);
+        handle_answer(&what_to_do_answers);
+    }
+    fn stay_on_plane() {
+        print_text("Jake kept on looking around in the dark. Unfortunately, suddenly a bear found Jake and attacked him for no reason. Jake died of suffocation.", normal);
+        print_text("\n\n", paragraph_change);
+
+        fail_game();
     }
     pub fn start_story() {
         print_text("JAKE WALKER", title);
@@ -130,6 +193,9 @@ mod actions {
         ];
         print_question("What do you do?", &what_to_do_answers);
         handle_answer(&what_to_do_answers);
+    }
+    fn win_game() {
+        print_victory("YOU WON!");
     }
 }
 

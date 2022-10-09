@@ -4,6 +4,7 @@ use time;
 
 enum PrintColor {
     Green,
+    Yellow,
 }
 
 fn print_disable_color() {
@@ -12,6 +13,7 @@ fn print_disable_color() {
 fn print_enable_color(color: PrintColor) {
     match color {
         PrintColor::Green => print!("\x1b[0;32m"),
+        PrintColor::Yellow => print!("\x1b[0;33m"),
     }
 }
 pub fn print_question(question: &str, answers: &[answer::AnswerOption]) {
@@ -44,4 +46,12 @@ pub fn print_text(value: &str, callback: fn(c: &char) -> print_callbacks::Settin
     }
 
     io::stdout().flush().unwrap();
+}
+pub fn print_victory(value: &str) {
+    print_enable_color(PrintColor::Yellow);
+
+    print!("{}", value);
+
+    print_disable_color();
+    println!();
 }
